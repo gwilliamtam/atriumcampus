@@ -32,10 +32,12 @@ class Loans
         $this->connect();
 
 	    $sql = "insert into test (id, first_name, middle_initial, last_name, loan, value) values 
-                    (1, 'Guillermo', 'A', 'Williamson', 3000, 2750), 
+                    (1, 'Guillermo', 'A', 'Williamson', 3000, 2750)";
+	    $this->conn->query($sql);
+	    
+        $sql = "insert into test (id, first_name, middle_initial, last_name, loan, value) values 
                     (2, 'Carolina', '', 'Williamson', 2500, 2350)";
-	    $this->conn->query($sql);
-	    $this->conn->query($sql);
+        $this->conn->query($sql);
 
 	    $this->disconnect();
     }

@@ -15,7 +15,7 @@ include("header.php");
         <tr>
             <th scope="col">Id</th>
             <th scope="col">First Name</th>
-            <th scope="col">Middle</th>
+            <th scope="col">Middle Initial</th>
             <th scope="col">Last Name</th>
             <th scope="col">Loan</th>
             <th scope="col">Value</th>
@@ -30,7 +30,7 @@ include("header.php");
         <tr>
             <td>{$loan['id']}</td>
             <td>{$loan['first_name']}</td>
-            <td>{$loan['middle']}</td>
+            <td>{$loan['middle_initial']}</td>
             <td>{$loan['last_name']}</td>
             <td>{$loan['loan']}</td>
             <td>{$loan['value']}</td>
@@ -52,8 +52,8 @@ HTML;
                 </td>
                 <td>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="middle" name="middle" placeholder="Middle" maxlength="1">
-                        <small id="middle-help" class="form-text text-muted">Middle</small>
+                        <input type="text" class="form-control" id="middle-initial" name="middleInitial" placeholder="Middle Initial" maxlength="1">
+                        <small id="middle-initial-help" class="form-text text-muted">Middle Initial</small>
                     </div>
                 </td>
                 <td>
