@@ -43,16 +43,16 @@ HTML;
     }
     ?>
     <tr>
-        <td colspan="6"></td>
+        <td colspan="7"></td>
         <td>
-            <button class="btn btn-primary" class="add-student">Add Student</button>
-        </td>
-        <td>
-            <button class="btn btn-primary" class="save-changes">Save Changes</button>
+            <button class="btn btn-primary add-student">Add Student</button>
         </td>
     </tr>
         </tbody>
     </table>
+    <div class="">
+        <button class="btn btn-primary save-changes">Save Changes</button>
+    </div>
 </div>
 
 <div class="modal" tabindex="-1" role="dialog" id="editor">
@@ -110,7 +110,7 @@ HTML;
     {
         load() {
             $(".add-student").on("click", function() {
-                $('#editpr').modal('show');
+                $('#editor').modal('show');
             }) ;
         }
     }
