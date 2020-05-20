@@ -27,6 +27,12 @@ class Loans
         $this->conn->close();
     }
 
+    public function populate()
+    {
+	$sql = "insert into test (id, first_name, middle_initial, last_name, loan, value) values (1, 'Guillermo', 'A', 'Williamson', 3000, 2750)";
+	$result = $this->conn->query($sql);
+    }
+
     public function all()
     {
         $sql = "SELECT id, first_name, middle_initial, last_name, loan, value FROM test limit 10";
@@ -34,7 +40,7 @@ class Loans
 
         if ($result->num_rows > 0) {
             // output data of each row
-            return $result->fetch_all();
+            return $result->fetch_all(MYSQLI_ASSOC);
         }
         return null;
     }
