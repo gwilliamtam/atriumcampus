@@ -33,9 +33,9 @@ include("header.php");
             <td>{$loan['first_name']}</td>
             <td>{$loan['middle_initial']}</td>
             <td>{$loan['last_name']}</td>
-            <td>{$loan['loan']}</td>
-            <td>{$loan['value']}</td>
-            <td></td>
+            <td class="text-right">{$loan['loan']}</td>
+            <td class="text-right">{$loan['value']}</td>
+            <td class="text-right">{$loan['ltv']}</td>
             <td class="text-center">
                 <button class="btn btn-primary update-row">Update</button>
             </td>

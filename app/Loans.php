@@ -58,7 +58,9 @@ class Loans
     {
         if (!$this->isLocal()) {
             $this->connect();
-            $sql = "SELECT id, first_name, middle_initial, last_name, loan, value FROM test limit 10";
+            $sql = "SELECT id, first_name, middle_initial, last_name, loan, value,
+                     (if (value=0, 0, format(loan/value*100, 2))) as ltv
+                    FROM test";
             $result = $this->conn->query($sql);
 
             if ($result->num_rows > 0) {
