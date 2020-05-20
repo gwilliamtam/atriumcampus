@@ -8,5 +8,6 @@
 <body>
 <nav class="navbar navbar-light bg-light">
 	<a class="navbar-brand" href="http://atriumcampus.com">
+        <img src="img/nav-logo.png">
 	</a>
 </nav>

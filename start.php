@@ -11,7 +11,7 @@ include("header.php");
 ?>
 
 <div class="container">
-    <table class="table">
+    <table class="table loans-table">
         <thead>
         <tr>
             <th scope="col">Id</th>
