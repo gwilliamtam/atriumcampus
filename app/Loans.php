@@ -34,7 +34,7 @@ class Loans
 
         if ($result->num_rows > 0) {
             // output data of each row
-            return $result;
+            return $result->fetch_all();
         }
         return null;
     }
