@@ -4,6 +4,7 @@ require_once('app/Loans.php');
 
 $loans = new Loans;
 $loans->connect();
+$loans->populate();
 $allLoans = $loans->all();
 $loans->disconnect();
 
@@ -25,22 +26,19 @@ include("header.php");
         </thead>
         <tbody>
     <?php
-
-    foreach ($allLoans as $loan) {
-    ?>
+    foreach ($allLoans as $key => $loan) {
+	echo <<<HTML
         <tr>
-            <th scope="row">{{ $loan['id']}}</th>
-            <td>{{ $loan['id']}}</td>
-            <td>{{ $loan['first_name']}}</td>
-            <td>{{ $loan['middle']}}</td>
-            <td>{{ $loan['last_name']}}</td>
-            <td>{{ $loan['loan']}}</td>
-            <td>{{ $loan['value']}}</td>
+            <td>{$loan['id']}</td>
+            <td>{$loan['first_name']}</td>
+            <td>{$loan['middle']}</td>
+            <td>{$loan['last_name']}</td>
+            <td>{$loan['loan']}</td>
+            <td>{$loan['value']}</td>
             <td></td>
         </tr>
-    <?php
+HTML;
     }
-
     ?>
         </tbody>
     </table>
