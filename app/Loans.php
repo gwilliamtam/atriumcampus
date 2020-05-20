@@ -21,7 +21,10 @@ class Loans
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "SELECT id, first_name, middle_initial, last_name, loan, 'value' FROM test limit 10";
+	$sql = "insert into test (id, first_name, middle_initial, last_name, loan, value) values (1, 'Guillermo', 'A', 'Williamson', 3000, 2750)";
+	$result = $conn->query($sql);
+
+        $sql = "SELECT id, first_name, middle_initial, last_name, loan, value FROM test limit 10";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
