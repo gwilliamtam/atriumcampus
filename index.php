@@ -3,7 +3,7 @@ use App\Loans as Loans;
 require_once('app/Loans.php');
 
 $loans = new Loans;
-$loans->connect();
+#$loans->populate();
 $allLoans = $loans->all();
 
 include("header.php");
@@ -27,7 +27,7 @@ include("header.php");
     <?php
     foreach ($allLoans as $key => $loan) {
 	echo <<<HTML
-        <tr>
+        <tr class="studen-row" student-id="{$loan['id']}">
             <td>{$loan['id']}</td>
             <td>{$loan['first_name']}</td>
             <td>{$loan['middle_initial']}</td>
@@ -42,51 +42,79 @@ include("header.php");
 HTML;
     }
     ?>
-            <tr>
-                <td></td>
-                <td>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="first-name" name="firstName" placeholder="First Name" maxlength="30">
-                        <small id="first-name-help" class="form-text text-muted">First Name</small>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="middle-initial" name="middleInitial" placeholder="Middle Initial" maxlength="1">
-                        <small id="middle-initial-help" class="form-text text-muted">Middle Initial</small>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="last-name" name="lastName" placeholder="Last Name" maxlength="30">
-                        <small id="last-name-help" class="form-text text-muted">Last Name</small>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="number" class="form-control" id="loan" name="loan" placeholder="Loan" maxlength="13">
-                        <small id="loan-help" class="form-text text-muted">Loan</small>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="number" class="form-control" id="value" name="value" placeholder="Value" maxlength="13">
-                        <small id="value-help" class="form-text text-muted">Value</small>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <input type="number" class="form-control" id="value" placeholder="LTV" readonly>
-                        <small id="loan-to-value-help" class="form-text text-muted">Loan-To-Value</small>
-                    </div>
-                </td>
-                <td>
-                    <button class="btn btn-primary">Add</button>
-                </td>
-            </tr>
+    <tr>
+        <td colspan="6"></td>
+        <td>
+            <button class="btn btn-primary" class="add-student">Add Student</button>
+        </td>
+        <td>
+            <button class="btn btn-primary" class="save-changes">Save Changes</button>
+        </td>
+    </tr>
         </tbody>
     </table>
 </div>
+
+<div class="modal" tabindex="-1" role="dialog" id="editor">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="first-name" placeholder="First Name" maxlength="30">
+                    <small id="first-name-help" class="form-text text-muted">First Name</small>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="middle-initial" placeholder="Middle Initial" maxlength="1">
+                    <small id="middle-initial-help" class="form-text text-muted">Middle Initial</small>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="last-name" placeholder="Last Name" maxlength="30">
+                    <small id="last-name-help" class="form-text text-muted">Last Name</small>
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" id="loan" placeholder="Loan" maxlength="13">
+                    <small id="loan-help" class="form-text text-muted">Loan</small>
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" id="value" placeholder="Value" maxlength="13">
+                    <small id="value-help" class="form-text text-muted">Value</small>
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control" id="loan-to-value" placeholder="LTV" readonly>
+                    <small id="loan-to-value-help" class="form-text text-muted">Loan-To-Value</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Add / Update</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function(){
+        let loans = new Loans();
+        loans.load()
+    });
+
+</script>
+<script>
+    class Loans
+    {
+        load() {
+            $(".add-student").on("click", function() {
+                $('#editpr').modal('show');
+            }) ;
+        }
+    }
+</script>
 
 <?php
 include("footer.php");
