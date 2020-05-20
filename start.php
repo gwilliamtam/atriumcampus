@@ -3,4 +3,14 @@ use App\Loans as Loans;
 require_once('app/Loans.php');
 
 $loans = new Loans;
-$loans->listLoans();
+$loans->connect();
+$allLoans = $loans->all();
+$loans->disconnect();
+
+var_dump($allLoans);
+?>
+
+<div class="content">
+
+</div>
+
