@@ -29,12 +29,20 @@ class Loans
 
     public function populate()
     {
-	$sql = "insert into test (id, first_name, middle_initial, last_name, loan, value) values (1, 'Guillermo', 'A', 'Williamson', 3000, 2750)";
-	$result = $this->conn->query($sql);
+        $this->connect();
+
+	    $sql = "insert into test (id, first_name, middle_initial, last_name, loan, value) values 
+                    (1, 'Guillermo', 'A', 'Williamson', 3000, 2750), 
+                    (2, 'Carolina', '', 'Williamson', 2500, 2350)";
+	    $this->conn->query($sql);
+	    $this->conn->query($sql);
+
+	    $this->disconnect();
     }
 
     public function all()
     {
+        $this->connect();
         $sql = "SELECT id, first_name, middle_initial, last_name, loan, value FROM test limit 10";
         $result = $this->conn->query($sql);
 
@@ -42,6 +50,7 @@ class Loans
             // output data of each row
             return $result->fetch_all(MYSQLI_ASSOC);
         }
+        $this->disconnect();
         return null;
     }
 }

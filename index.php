@@ -4,9 +4,7 @@ require_once('app/Loans.php');
 
 $loans = new Loans;
 $loans->connect();
-$loans->populate();
 $allLoans = $loans->all();
-$loans->disconnect();
 
 include("header.php");
 ?>
@@ -22,6 +20,7 @@ include("header.php");
             <th scope="col">Loan</th>
             <th scope="col">Value</th>
             <th scope="col">LTV</th>
+            <th scope="col">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -36,6 +35,9 @@ include("header.php");
             <td>{$loan['loan']}</td>
             <td>{$loan['value']}</td>
             <td></td>
+            <td>
+                <button class="btn btn-primary">Update</button>
+            </td>
         </tr>
 HTML;
     }
@@ -77,6 +79,9 @@ HTML;
                         <input type="number" class="form-control" id="value" placeholder="LTV" readonly>
                         <small id="loan-to-value-help" class="form-text text-muted">Loan-To-Value</small>
                     </div>
+                </td>
+                <td>
+                    <button class="btn btn-primary">Add</button>
                 </td>
             </tr>
         </tbody>
