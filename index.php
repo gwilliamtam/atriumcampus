@@ -14,7 +14,7 @@ include("header.php");
 
 <div class="container">
     <div class="alert alert-danger d-none" id="alert" role="alert">
-        Remember to click the button SAVE LIST or your data may be lost!
+        Remember to click the button SAVE LIST or your changes may be lost!
     </div>
     <table class="table table-striped" id="loans-table">
         <thead>
