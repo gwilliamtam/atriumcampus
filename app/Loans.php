@@ -69,4 +69,67 @@ class Loans
 
         return [];
     }
+
+    public function saveTable()
+    {
+        $table = [];
+        $rowsToDelete = [];
+        if (!empty($_POST)) {
+            if (array_key_exists('table', $_POST)) {
+                $table = json_decode($_POST['table']);
+            }
+            if (array_key_exists('rowsToDelete', $_POST)) {
+                $rowsToDelete = json_decode(htmlentities($_POST['rowsToDelete'], ENT_QUOTES, 'UTF-8'));
+            }
+        }
+        var_dump($_POST['table']);
+        echo "<br>";
+        var_dump($table);
+        echo "<br>";
+        var_dump($rowsToDelete);
+        if (!$this->isLocal()) {
+            $this->connect();
+
+            if (!empty($rowsToDelete)) {
+                $deleteQuery = "delete from test where id in (". implode(',', $rowsToDelete) .")";
+                $result = $this->conn->query($deleteQuery);
+            }
+
+            if (!empty($table)) {
+                $dataInsertQuery = '';
+                foreach ($table as $row) {
+                    if (!empty($row->id)) {
+                        // update existent rows
+                        // next release will check if row need to be updated
+                        $updateQuery = <<<UPDATE
+                            update test set first_name = {$row->firstName}, 
+                                middle_initial = {$row->middleInitial}, 
+                                last_name = {$row->lastName}, 
+                                loan = {$row->loan}, 
+                                value = {$row->value}) 
+                                where id = {$row->id}
+UPDATE;
+                        $this->conn->query($updateQuery);
+                    } else {
+                        // set data for insert query
+                        $dataInsertQuery = "(" . $row->firstName
+                            . ", $row->middleInitial"
+                            . ", $row->lastName"
+                            . ", $row->loan"
+                            . ", $row->value"
+                            . ")";
+                    }
+                }
+            }
+
+            if (!empty($dataInsertQuery)) {
+                // insert new rows
+                $insertQuery = "insert into test (first_name, middle_initial, last_name, loan, value) values " . $dataInsertQuery;
+                $this->conn->query($insertQuery);
+            }
+
+            $this->disconnect();
+        }
+
+    }
 }

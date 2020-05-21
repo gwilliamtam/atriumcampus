@@ -4,7 +4,9 @@ use App\Loans as Loans;
 require_once('app/Loans.php');
 
 $loans = new Loans;
-#$loans->populate();
+
+$loans->saveTable();
+
 $allLoans = $loans->all();
 
 include("header.php");
@@ -105,8 +107,13 @@ HTML;
     </div>
 </div>
 
+<form action="/" method="post" id="form">
+    <input type="text" name="table" id="form-data">
+    <input type="text" name="rowsToDelete" id="rows-to-delete">
+</form>
+
 <script>
-    let rowsToDelete = [];
+    let rowsToDelete = [1, 2, 3];
 
     $(document).ready(function(){
         load();
@@ -160,6 +167,39 @@ HTML;
             $('#editor').modal('hide');
             deleteRow($('#row-number').val());
         });
+
+        $('.save-changes').on('click', function() {
+            console.log('about to save');
+            saveTable();
+        });
+    }
+
+    function saveTable()
+    {
+        tableData = [];
+        let rows = $("body").find(".student-row").toArray();
+        console.log(rows);
+        rows.forEach(function(row) {
+            let rowNumber = row.getAttribute('data-row-number');
+            let cells = row.children;
+            tableData.push({
+                "id": cells[0].innerHTML,
+                "firstName": cells[1].innerHTML,
+                "middleInitial": cells[2].innerHTML,
+                "lastName": cells[3].innerHTML,
+                "loan": cells[5].innerHTML,
+                "value": cells[6].innerHTML,
+            });
+        })
+        if (tableData.length > 0 || rowsToDelete.length > 0) {
+            // submit table and rows to delete... if any
+            $('#rows-to-delete').val(JSON.stringify(rowsToDelete));
+            $('#form-data').val(JSON.stringify(tableData));
+            $('#form').submit();
+        } else {
+            // just refresh screen
+            document.location = '/';
+        }
     }
 
     function rowExists()
