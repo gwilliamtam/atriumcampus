@@ -16,7 +16,7 @@ include("header.php");
     <div class="alert alert-danger d-none" id="alert" role="alert">
         Remember to click the button SAVE LIST or your changes may be lost!
     </div>
-    <table class="table table-striped" id="loans-table">
+    <table class="table table-striped table-responsive-md" id="loans-table">
         <thead>
         <tr>
             <th scope="col"  class="text-left">Id</th>
