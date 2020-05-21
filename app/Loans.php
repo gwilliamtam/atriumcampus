@@ -19,10 +19,7 @@ class Loans
     public function connect()
     {
         if (!$this->isLocal()) {
-            $servername = "dev-db1.cluster-ccyyfxhqobvx.us-east-1.rds.amazonaws.com";
-            $username = "guillermo";
-            $password = "XAtqYbM2ZLQYUU2VzD7qAkAmfrEeVx6a";
-            $dbname = "guillermo_test";
+            require_once("credentials.php");
 
             $this->conn = new mysqli($servername, $username, $password, $dbname);
 
