@@ -108,12 +108,12 @@ HTML;
 </div>
 
 <form action="/" method="post" id="form">
-    <input type="text" name="table" id="form-data">
-    <input type="text" name="rowsToDelete" id="rows-to-delete">
+    <input type="hidden" name="table" id="form-data">
+    <input type="hidden" name="rowsToDelete" id="rows-to-delete">
 </form>
 
 <script>
-    let rowsToDelete = [1, 2, 3];
+    let rowsToDelete = [];
 
     $(document).ready(function(){
         load();
