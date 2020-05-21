@@ -26,21 +26,23 @@ include("header.php");
         </thead>
         <tbody>
     <?php
+    $cnt = 0;
     foreach ($allLoans as $key => $loan) {
-	echo <<<HTML
-        <tr>
-            <td>{$loan['id']}</td>
-            <td>{$loan['first_name']}</td>
-            <td>{$loan['middle_initial']}</td>
-            <td>{$loan['last_name']}</td>
-            <td class="text-right">{$loan['loan']}</td>
-            <td class="text-right">{$loan['value']}</td>
-            <td class="text-right">{$loan['ltv']}</td>
-            <td class="text-center">
-                <button class="btn btn-primary update-row">Update</button>
-            </td>
-        </tr>
+	    echo <<<HTML
+            <tr class="student-row" data-row-number="{$cnt}">
+                <td>{$loan['id']}</td>
+                <td>{$loan['first_name']}</td>
+                <td>{$loan['middle_initial']}</td>
+                <td>{$loan['last_name']}</td>
+                <td class="text-right">{$loan['loan']}</td>
+                <td class="text-right">{$loan['value']}</td>
+                <td class="text-right">{$loan['ltv']}</td>
+                <td class="text-center">
+                    <button class="btn btn-primary update-row">Update</button>
+                </td>
+            </tr>
 HTML;
+	    $cnt ++;
     }
     ?>
         </tbody>
@@ -52,7 +54,7 @@ HTML;
             <button class="btn btn-primary add-student">Add Student</button>
         </div>
         <div class="col text-center">
-            <button class="btn btn-primary save-changes">Save Changes</button>
+            <button class="btn btn-primary save-changes">Save List</button>
         </div>
     </div>
 </div>
@@ -68,6 +70,8 @@ HTML;
             </div>
             <div class="modal-body">
                 <div class="form-group">
+                    <input type="hidden" class="form-control" id="row-number">
+                    <input type="hidden" class="form-control" id="student-id">
                     <input type="text" class="form-control" id="first-name" placeholder="Enter First Name" maxlength="30">
                     <small id="first-name-help" class="form-text text-muted">First Name</small>
                 </div>
@@ -93,6 +97,7 @@ HTML;
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-danger mr-auto" id="delete-row">Remove</button>
                 <button type="button" class="btn btn-primary" id="add-update">Add / Update</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
             </div>
@@ -101,12 +106,18 @@ HTML;
 </div>
 
 <script>
+    let rowsToDelete = [];
+
     $(document).ready(function(){
         load();
     });
 
     function load() {
+
         $(".add-student").on("click", function() {
+            clearModalForm();
+            $('#add-update').html('Add');
+            $('#delete-row').addClass('d-none');
             $('#editor').modal('show');
         });
 
@@ -121,15 +132,83 @@ HTML;
         $('#add-update').on('click', function() {
             if (validateAddStudent()) {
                 $('#editor').modal('hide');
-                addRow();
+                if (rowExists()) {
+                    updateRow();
+                } else {
+                    addRow();
+                }
             };
         });
+
+        $('body').on('click', 'button.update-row', function() {
+            let row = $(this).parent().parent()
+            let cells = row.children()
+            $('#row-number').val(row[0].getAttribute('data-row-number'));
+            $('#student-id').val(cells[0].innerHTML);
+            $('#first-name').val(cells[1].innerHTML);
+            $('#middle-initial').val(cells[2].innerHTML);
+            $('#last-name').val(cells[3].innerHTML);
+            $('#loan').val(cells[4].innerHTML);
+            $('#value').val(cells[5].innerHTML);
+            $('#loan-to-value').val(cells[6].innerHTML);
+            $('#add-update').html('Update');
+            $('#delete-row').removeClass('d-none');
+            $('#editor').modal('show');
+        });
+
+        $('#delete-row').on('click', function() {
+            $('#editor').modal('hide');
+            deleteRow($('#row-number').val());
+        });
+    }
+
+    function rowExists()
+    {
+        let rowNumber = $("#row-number").val();
+        let row = $("body").find("[data-row-number='"+rowNumber+"']");
+        if (row.length > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    function updateRow()
+    {
+        let rowNumber = $("#row-number").val();
+        let row = $("body").find("[data-row-number='"+rowNumber+"']");
+        let cells = row.find('td');
+        cells[0].innerHTML = $('#student-id').val();
+        cells[1].innerHTML = $('#first-name').val();
+        cells[2].innerHTML = $('#middle-initial').val();
+        cells[3].innerHTML = $('#last-name').val();
+        cells[4].innerHTML = $('#loan').val();
+        cells[5].innerHTML = $('#value').val();
+        cells[6].innerHTML = $('#loan-to-value').val();
+    }
+
+    function totalRows()
+    {
+        return $('body tr.student-row').length;
+    }
+
+    function deleteRow(rowNumber)
+    {
+        let row = $("body").find("[data-row-number='"+rowNumber+"']");
+        let studentId = $('#student-id').val();
+        if (rowNumber) {
+            if (studentId) {
+                rowsToDelete.push(studentId)
+            }
+            row.remove();
+        }
     }
 
     function addRow()
     {
         let table = document.getElementById('loans-table');
         let row = table.insertRow(-1);
+        row.className = 'student-row';
+        row.setAttribute('data-row-number', totalRows());
 
         let cellId = row.insertCell(0);
         cellId.innerHTML = '';
@@ -160,6 +239,18 @@ HTML;
         cellAction.className = 'text-center';
     }
 
+    function clearModalForm()
+    {
+        $('#student-id').val('');
+        $('#row-number').val('');
+        $('#first-name').val('');
+        $('#middle-initial').val('');
+        $('#last-name').val('');
+        $('#loan').val('');
+        $('#value').val('')
+        $('#loan-to-value').val('');
+    }
+
     function validateAddStudent()
     {
         if ($('#first-name').val()
@@ -176,7 +267,6 @@ HTML;
 
         const loan = $('#loan').val();
         const value = $('#value').val();
-        console.log('updating LTV with ', loan, value);
         let ltv = 0;
         if (value && loan) {
             if (loan != 0) {
