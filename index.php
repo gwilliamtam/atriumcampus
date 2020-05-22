@@ -191,8 +191,8 @@ HTML;
                 "firstName": cells[1].innerHTML,
                 "middleInitial": cells[2].innerHTML,
                 "lastName": cells[3].innerHTML,
-                "loan": cells[5].innerHTML,
-                "value": cells[6].innerHTML,
+                "loan": cells[4].innerHTML,
+                "value": cells[5].innerHTML,
             });
         })
         if (tableData.length > 0 || rowsToDelete.length > 0) {
